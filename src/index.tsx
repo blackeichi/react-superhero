@@ -52,6 +52,11 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+a{
+	outline : none;
+	text-decoration : none;
+	color : black;
+}
 `;
 
 ReactDOM.render(
