@@ -13,6 +13,7 @@ function App() {
         <Routes>
           <Route path={"/"} element={<Home></Home>}></Route>
           <Route path={"/marvel"} element={<Marvel></Marvel>}></Route>
+          <Route path={"/marvel/:Id"} element={<Marvel></Marvel>}></Route>
         </Routes>
       </BrowserRouter>
     </>
