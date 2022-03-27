@@ -6,9 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Header = styled.div`
-  width: 80%;
+  width: 100%;
   height: 40px;
-  min-width: 1000px;
+  max-width: 1500px;
   display: flex;
   justify-content: right;
   div {
@@ -27,74 +27,64 @@ const Header = styled.div`
     height: 40px;
   }
 `;
-const Heros = styled(motion.div)`
-  width: 80%;
-  min-width: 1000px;
+const Category = styled(motion.div)`
+  width: 100%;
+  max-width: 1500px;
+  height: 80vh;
   justify-self: center;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
 `;
 const Hero = styled(motion.div)`
-  width: 20%;
-  min-width: 250px;
-  height: 60vh;
-  background-position: center;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-position: top;
   background-size: cover;
+  background-repeat: no-repeat;
   position: relative;
-  cursor: pointer;
-  div {
-    opacity: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 50px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)),
+    url("https://getwallpapers.org/wp-content/uploads/2021/08/Spiderman-Background.jpg");
+`;
+const Menu = styled(motion.div)`
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 600px;
+  height: 1000px;
+  transform: rotate(40deg);
+  position: absolute;
+  right: -200px;
+  bottom: -300px;
+`;
+const Menulist = styled(motion.div)`
+  color: white;
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+  font-size: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 200px;
+  position: absolute;
+  right: 50px;
+  bottom: 150px;
+  h1 {
+    cursor: pointer;
   }
 `;
-const heroname = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duaration: 0.1,
-      type: "tween",
-    },
+
+const menulistShow = {
+  init: {
+    x: -200,
   },
-};
-const heroHover = {
-  normal: {
-    scale: 1,
-  },
-  hover: {
-    zIndex: 1,
-    scale: 1.1,
-    transition: {
-      delay: 0.5,
-      duaration: 0.1,
-      type: "tween",
-    },
-  },
+  anim: {},
 };
 
 function Marvel() {
-  const [heroId, setHeroId] = useState();
-  const history = useNavigate();
-  const onBoxopen = (id: number) => {
-    history(`/marvel/${id}`);
-  };
-  const boxOpenMatch = useLocation();
-  console.log(boxOpenMatch);
   return (
     <>
       <div
         style={{
           width: "100%",
-          height: "140vh",
+          height: "100vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -135,150 +125,27 @@ function Marvel() {
             <div>X</div>
           </Link>
         </Header>
-        <Heros>
-          <Hero
-            onClick={() => onBoxopen(346)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("http://thumbnail.egloos.net/600x0/http://pds21.egloos.com/pds/201805/15/21/f0041321_5afaeddcd6541.jpg")`,
-            }}
-          >
-            <motion.div variants={heroname}>
-              {
-                //부모요소에서 whileHover를 설정했으므로 variants만 넣어도 whilHover 적용
-              }
-              <h1>Iron Man</h1>
-            </motion.div>
+        <Category>
+          <Hero>
+            <Menu></Menu>
+            <Menulist>
+              <motion.h1
+                style={{ x: 400, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                Comics
+              </motion.h1>
+              <motion.h1
+                style={{ x: 400, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                Charaters
+              </motion.h1>
+            </Menulist>
           </Hero>
-          <Hero
-            onClick={() => onBoxopen(149)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("http://image.cine21.com/resize/cine21/still/2018/1121/19_06_16__5bf52e186f884[W578-].jpg")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Captain America</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(620)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://phoneky.co.uk/thumbs/wallpapers/p2/movies/28/cdedf98b12839312.jpg")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Spider Man</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(226)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://mblogthumb-phinf.pstatic.net/MjAxNjExMTJfMjAz/MDAxNDc4OTMzMzY2MTk0.haxopsWCUANUUvMDG5s4EpaA2idmgPoll5A9vpHh7xUg.yo5vwgmO27kN3ULKlbvO8-ErU-Sk9q31mZKOF7oA4E0g.JPEG.naminng/Benedict-Cumberbatch-Doctor-Strange-HD-Wallpaper-05528.jpg?type=w2")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Doctor Strange</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(332)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://p4.wallpaperbetter.com/wallpaper/1018/932/961/hulk-hulk-film-muscles-superhero-marvel-cinematic-universe-hd-wallpaper-preview.jpg")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Hulk</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(313)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://www.wallpaperuse.com/wallp/58-583317_m.jpg")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Hawk Eye</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(107)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://prodigits.co.uk/thumbs/wallpapers/p2/misc/44/93746a6912251164.jpg")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Black widow</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(106)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile27.uf.tistory.com%2Fimage%2F99FF1F475AE1F4751CD7C4")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Black Panther</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(659)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://www.wallpapertip.com/wmimgs/35-354165_fondos-de-pantalla-hd-thor.jpg")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Thor</h1>
-            </motion.div>
-          </Hero>
-          <Hero
-            onClick={() => onBoxopen(579)}
-            variants={heroHover}
-            whileHover="hover"
-            initial="normal"
-            style={{
-              backgroundImage: `url("https://p4.wallpaperbetter.com/wallpaper/576/183/656/marvel-cinematic-universe-marvel-comics-cleavage-scarlet-witch-vision-hd-wallpaper-preview.jpg")`,
-            }}
-          >
-            {" "}
-            <motion.div variants={heroname}>
-              <h1>Scarlet Witch</h1>
-            </motion.div>
-          </Hero>
-        </Heros>
+        </Category>
       </div>
     </>
   );
