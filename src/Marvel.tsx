@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 //useHistory --> useNavigate로 교체됨
 import styled from "styled-components";
-
+import { ICharacter, marvelHero } from "./api";
+import { imageMaking } from "./util";
 const Header = styled.div`
   width: 100%;
   height: 40px;
@@ -71,14 +73,46 @@ const Menulist = styled(motion.div)`
   }
 `;
 
+const HeroBox = styled(motion.div)`
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+`;
+const HeroImg = styled(motion.div)`
+  width: 100px;
+  height: 150px;
+  background-position: center;
+  background-size: cover;
+`;
+const Noimage = styled(motion.div)`
+  width: 100px;
+  height: 150px;
+  background-image: url("https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482930.jpg");
+  background-position: center;
+  background-size: cover;
+`;
+const Cover = styled(motion.div)`
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+`;
+
 const menulistShow = {
   init: {
     x: -200,
   },
   anim: {},
 };
+const offset = 5;
 
 function Marvel() {
+  const { data, isLoading } = useQuery<ICharacter>(
+    ["marvel", "nowShowing"],
+    marvelHero
+  );
+  console.log(data);
+  const [index, setIndex] = useState(0);
   return (
     <>
       <div
@@ -146,6 +180,30 @@ function Marvel() {
             </Menulist>
           </Hero>
         </Category>
+        <Cover>
+          {data?.data.results
+            .slice(offset * index, offset * index + offset)
+            .map((Heee) => (
+              <>
+                <HeroBox>
+                  {Heee.thumbnail.path ===
+                  "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ? (
+                    <Noimage />
+                  ) : (
+                    <HeroImg
+                      style={{
+                        backgroundImage: `url(${imageMaking(
+                          Heee.thumbnail.path,
+                          Heee.thumbnail.extension
+                        )})`,
+                      }}
+                    />
+                  )}
+                  <span style={{ color: "white" }}>{Heee.name}</span>
+                </HeroBox>
+              </>
+            ))}
+        </Cover>
       </div>
     </>
   );
