@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useParams } from "react-router";
 import { useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 //useHistory --> useNavigate로 교체됨
@@ -72,37 +73,94 @@ const Menulist = styled(motion.div)`
     cursor: pointer;
   }
 `;
+const Cover = styled(motion.div)`
+  background-color: #454140;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+`;
+
+const HeaderBox = styled(motion.div)`
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)),
+    url("https://947597.smushcdn.com/2554848/wp-content/uploads/2011/07/Marvel-Universe.jpg?lossy=0&strip=1&webp=1");
+  height: 140px;
+  svg {
+    width: 40px;
+    cursor: pointer;
+    fill: white;
+  }
+  background-position: center;
+  background-size: contain;
+`;
 
 const HeroBox = styled(motion.div)`
   width: 100%;
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: "IBM Plex Sans Arabic", sans-serif;
 `;
 const HeroImg = styled(motion.div)`
   width: 100px;
-  height: 150px;
+  height: 120px;
   background-position: center;
   background-size: cover;
 `;
 const Noimage = styled(motion.div)`
   width: 100px;
-  height: 150px;
-  background-image: url("https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482930.jpg");
+  height: 120px;
+  background-image: url("https://yt3.ggpht.com/fGvQjp1vAT1R4bAKTFLaSbdsfdYFDwAzVjeRVQeikH22bvHWsGULZdwIkpZXktcXZc5gFJuA3w=s900-c-k-c0x00ffffff-no-rj");
   background-position: center;
   background-size: cover;
 `;
-const Cover = styled(motion.div)`
-  background-color: rgba(0, 0, 0, 0.8);
-  width: 100%;
-  height: 100vh;
+const HeroInfo = styled(motion.div)`
+  width: 80%;
+  max-width: 1400px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10px;
+  span {
+    width: 100%;
+  }
+`;
+const Herodescription = styled.span`
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+`;
+const Overlay = styled(motion.div)`
+  background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+`;
+const Detail = styled(motion.div)`
+  background-color: white;
+  width: 70%;
+  height: 80%;
+  position: relative;
 `;
 
 const menulistShow = {
-  init: {
-    x: -200,
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      staggerChildren: 0.3,
+      duration: 0.3,
+    },
   },
-  anim: {},
+};
+const item = {
+  hidden: { opacity: 0, x: 400 },
+  show: { opacity: 1, x: 0 },
 };
 const offset = 5;
 
@@ -113,6 +171,29 @@ function Marvel() {
   );
   console.log(data);
   const [index, setIndex] = useState(0);
+  const maxIndex = Math.floor(100 / offset) - 1;
+  const nextClick = () => {
+    setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+  };
+  const prevClick = () => {
+    setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+  };
+  const [boxOpen, setBoxOpen] = useState(false);
+  const toggleBox = () => {
+    setBoxOpen((prev) => !prev);
+  };
+  const [detailOpen, setDetailOpen] = useState(false);
+  const navigate = useNavigate();
+  const onDetail = (id: number) => {
+    navigate(`/marvel/${id}`);
+    setDetailOpen(true);
+  };
+  const onOverlayClick = () => {
+    navigate("/marvel");
+    setDetailOpen(false);
+  };
+  const heroId = useParams();
+  const layoutid = String(heroId.Id);
   return (
     <>
       <div
@@ -174,36 +255,121 @@ function Marvel() {
                 style={{ x: 400, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
+                onClick={toggleBox}
               >
                 Charaters
               </motion.h1>
             </Menulist>
           </Hero>
         </Category>
-        <Cover>
-          {data?.data.results
-            .slice(offset * index, offset * index + offset)
-            .map((Heee) => (
-              <>
-                <HeroBox>
-                  {Heee.thumbnail.path ===
-                  "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ? (
-                    <Noimage />
-                  ) : (
-                    <HeroImg
-                      style={{
-                        backgroundImage: `url(${imageMaking(
-                          Heee.thumbnail.path,
-                          Heee.thumbnail.extension
-                        )})`,
-                      }}
-                    />
-                  )}
-                  <span style={{ color: "white" }}>{Heee.name}</span>
-                </HeroBox>
-              </>
-            ))}
-        </Cover>
+        {boxOpen ? (
+          <>
+            <Cover>
+              <HeaderBox>
+                <svg
+                  onClick={prevClick}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z" />
+                </svg>
+                <svg
+                  onClick={nextClick}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z" />
+                </svg>
+                <svg
+                  onClick={toggleBox}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z" />
+                </svg>
+              </HeaderBox>
+              {isLoading ? (
+                <h1
+                  style={{
+                    width: "100%",
+                    fontSize: "30px",
+                    fontWeight: 700,
+                    color: "white",
+                    position: "absolute",
+                    left: "10%",
+                    top: "40%",
+                  }}
+                >
+                  Now Loading...
+                </h1>
+              ) : (
+                <motion.div
+                  style={{ x: 400, opacity: 0 }}
+                  variants={menulistShow}
+                  initial="hidden"
+                  animate="show"
+                >
+                  {data?.data.results
+                    .slice(offset * index, offset * index + offset)
+                    .map((Heee) => (
+                      <>
+                        <HeroBox
+                          variants={item}
+                          key={Heee.id}
+                          layoutId={Heee.id + ""}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {Heee.thumbnail.path ===
+                          "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ? (
+                            <Noimage
+                              onClick={() => onDetail(Heee.id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <HeroImg
+                              onClick={() => onDetail(Heee.id)}
+                              style={{
+                                cursor: "pointer",
+                                backgroundImage: `url(${imageMaking(
+                                  Heee.thumbnail.path,
+                                  Heee.thumbnail.extension
+                                )})`,
+                              }}
+                            />
+                          )}
+                          <HeroInfo>
+                            <span
+                              onClick={() => onDetail(Heee.id)}
+                              style={{
+                                cursor: "pointer",
+                                fontWeight: 800,
+                                fontSize: "25px",
+                                marginBottom: "30px",
+                              }}
+                            >
+                              {Heee.name}
+                            </span>
+                            {Heee.description === "" ? (
+                              <Herodescription>No description</Herodescription>
+                            ) : (
+                              <Herodescription>
+                                {Heee.description}
+                              </Herodescription>
+                            )}
+                          </HeroInfo>
+                        </HeroBox>
+                      </>
+                    ))}
+                </motion.div>
+              )}
+            </Cover>
+            {detailOpen ? (
+              <Overlay onClick={onOverlayClick}>
+                <Detail layoutId={layoutid}></Detail>
+              </Overlay>
+            ) : null}
+          </>
+        ) : null}
       </div>
     </>
   );

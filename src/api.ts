@@ -39,6 +39,6 @@ export interface ICharacter {
 
 export function marvelHero() {
   return fetch(
-    `https://gateway.marvel.com:443/v1/public/characters?orderBy=modified&limit=100&apikey=${PublicKey}`
+    `https://gateway.marvel.com:443/v1/public/characters?orderBy=name&limit=100&apikey=${PublicKey}`
   ).then((response) => response.json());
 }
