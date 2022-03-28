@@ -6,7 +6,12 @@ import { useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 //useHistory --> useNavigate로 교체됨
 import styled from "styled-components";
-import { ICharacter, marvelHero } from "./api";
+import {
+  ICharacter,
+  marvelHero,
+  marvelHeroComics,
+  marvelHeroDetail,
+} from "./api";
 import { imageMaking } from "./util";
 const Header = styled.div`
   width: 100%;
@@ -131,7 +136,7 @@ const Herodescription = styled.span`
   font-size: 15px;
 `;
 const Overlay = styled(motion.div)`
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   display: flex;
   justify-content: center;
@@ -141,12 +146,29 @@ const Overlay = styled(motion.div)`
   top: 0;
 `;
 const Detail = styled(motion.div)`
-  background-color: white;
+  background-color: black;
   width: 70%;
-  height: 80%;
-  position: relative;
+  position: fixed;
+  top: 5%;
 `;
-
+const DetailImage = styled(motion.div)`
+  width: 50%;
+  height: 300px;
+  background-color: black;
+  background-position: center;
+  background-size: cover;
+`;
+const DetailInfo = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 20px 20px;
+  font-family: "Roboto", sans-serif;
+  color: white;
+`;
+const DetailComics = styled.div``;
 const menulistShow = {
   hidden: { opacity: 0 },
   show: {
@@ -169,7 +191,6 @@ function Marvel() {
     ["marvel", "nowShowing"],
     marvelHero
   );
-  console.log(data);
   const [index, setIndex] = useState(0);
   const maxIndex = Math.floor(100 / offset) - 1;
   const nextClick = () => {
@@ -194,6 +215,16 @@ function Marvel() {
   };
   const heroId = useParams();
   const layoutid = String(heroId.Id);
+  const { data: clickedHero, isLoading: heroLoading } = useQuery<ICharacter>(
+    ["clickedHero", layoutid],
+    () => marvelHeroDetail(layoutid)
+  );
+  const { data: clickedHeroComics, isLoading: heroComicsLoading } = useQuery(
+    ["clickedHeroComics", layoutid],
+    () => marvelHeroComics(layoutid)
+  );
+
+  console.log(clickedHero);
   return (
     <>
       <div
@@ -316,17 +347,18 @@ function Marvel() {
                         <HeroBox
                           variants={item}
                           key={Heee.id}
-                          layoutId={Heee.id + ""}
                           transition={{ duration: 0.3 }}
                         >
                           {Heee.thumbnail.path ===
                           "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ? (
                             <Noimage
+                              layoutId={Heee.id + ""}
                               onClick={() => onDetail(Heee.id)}
                               style={{ cursor: "pointer" }}
                             />
                           ) : (
                             <HeroImg
+                              layoutId={Heee.id + ""}
                               onClick={() => onDetail(Heee.id)}
                               style={{
                                 cursor: "pointer",
@@ -364,9 +396,70 @@ function Marvel() {
               )}
             </Cover>
             {detailOpen ? (
-              <Overlay onClick={onOverlayClick}>
-                <Detail layoutId={layoutid}></Detail>
-              </Overlay>
+              <>
+                <Overlay onClick={onOverlayClick}></Overlay>
+                <Detail>
+                  {heroLoading ? (
+                    <h1
+                      style={{
+                        width: "100%",
+                        fontSize: "30px",
+                        fontWeight: 700,
+                        color: "blaCk",
+                        position: "absolute",
+                        left: "10%",
+                        top: "40%",
+                      }}
+                    >
+                      Now Loading...
+                    </h1>
+                  ) : (
+                    <>
+                      {" "}
+                      <div style={{ display: "flex" }}>
+                        <DetailImage
+                          layoutId={layoutid}
+                          style={{
+                            backgroundImage: `url(${imageMaking(
+                              String(
+                                clickedHero?.data.results[0].thumbnail.path
+                              ),
+                              clickedHero?.data.results[0].thumbnail.extension
+                            )})`,
+                          }}
+                        ></DetailImage>
+                        <DetailInfo>
+                          <span style={{ fontSize: "25px" }}>
+                            {clickedHero?.data.results[0].name}
+                          </span>
+                          {clickedHero?.data.results[0].description === "" ? (
+                            <span style={{ fontSize: "13px", width: "85%" }}>
+                              No description
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: "13px", width: "85%" }}>
+                              Description :{" "}
+                              {clickedHero?.data.results[0].description}
+                            </span>
+                          )}
+                          <span
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              window.open(
+                                `${clickedHero?.data.results[0].urls[0].url}`,
+                                "_blank"
+                              )
+                            }
+                          >
+                            For more detail...
+                          </span>
+                        </DetailInfo>
+                      </div>
+                      <DetailComics></DetailComics>
+                    </>
+                  )}
+                </Detail>
+              </>
             ) : null}
           </>
         ) : null}

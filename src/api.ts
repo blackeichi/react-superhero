@@ -32,6 +32,29 @@ export interface ICharacter {
             }
           ];
         };
+        urls: [{ url: string }];
+      }
+    ];
+  };
+}
+export interface IHeroComics {
+  data: {
+    results: [
+      {
+        id: number;
+        title: string;
+        description: string;
+        pageCount: number;
+        urls: [
+          {
+            url: string;
+          }
+        ];
+        dates: [{ date: string }];
+        thumbnail: {
+          path: string;
+          extension: string;
+        };
       }
     ];
   };
@@ -40,5 +63,16 @@ export interface ICharacter {
 export function marvelHero() {
   return fetch(
     `https://gateway.marvel.com:443/v1/public/characters?orderBy=name&limit=100&apikey=${PublicKey}`
+  ).then((response) => response.json());
+}
+
+export function marvelHeroDetail(id: string) {
+  return fetch(
+    `https://gateway.marvel.com:443/v1/public/characters/${id}?apikey=${PublicKey}`
+  ).then((response) => response.json());
+}
+export function marvelHeroComics(id: string) {
+  return fetch(
+    `https://gateway.marvel.com:443/v1/public/characters/${id}/comics?apikey=${PublicKey}`
   ).then((response) => response.json());
 }
