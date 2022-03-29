@@ -163,7 +163,8 @@ const DetailImage = styled(motion.div)`
   height: 300px;
   background-color: black;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 `;
 const DetailInfo = styled.div`
   width: 50%;
@@ -177,6 +178,7 @@ const DetailInfo = styled.div`
 `;
 const DetailComics = styled.div`
   display: flex;
+  padding: 0 10px;
 `;
 const Comics = styled.div`
   display: flex;
@@ -198,7 +200,8 @@ const item = {
   hidden: { opacity: 0, x: 400 },
   show: { opacity: 1, x: 0 },
 };
-const offset = 5;
+const offset = 4;
+const offset2 = 5;
 
 function Marvel() {
   const heroId = useParams();
@@ -224,7 +227,7 @@ function Marvel() {
     if (clickedHeroComics) {
       let maxIndex2: any;
       const totalMovies = (clickedHeroComics?.data.results).length - 1;
-      maxIndex2 = Math.floor(totalMovies / offset) - 1;
+      maxIndex2 = Math.floor(totalMovies / offset2) - 1;
       if (maxIndex2 === -1) {
         setIndex2(0);
       } else {
@@ -235,7 +238,7 @@ function Marvel() {
   const prevClick2 = () => {
     if (clickedHeroComics) {
       const totalMovies = (clickedHeroComics?.data.results).length - 1;
-      const maxIndex2 = Math.floor(totalMovies / offset) - 1;
+      const maxIndex2 = Math.floor(totalMovies / offset2) - 1;
       if (maxIndex2 === -1) {
         setIndex2(0);
       } else {
@@ -509,10 +512,7 @@ function Marvel() {
                             width: "100%",
                             fontSize: "30px",
                             fontWeight: 700,
-                            color: "blaCk",
-                            position: "absolute",
-                            left: "10%",
-                            top: "40%",
+                            color: "black",
                           }}
                         >
                           Now Loading...
@@ -531,7 +531,10 @@ function Marvel() {
                           </h1>
                           <DetailComics>
                             {clickedHeroComics?.data.results
-                              .slice(offset * index2, offset * index2 + offset)
+                              .slice(
+                                offset2 * index2,
+                                offset2 * index2 + offset2
+                              )
                               .map((comic) => (
                                 <>
                                   <Comics>
