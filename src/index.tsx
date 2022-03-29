@@ -57,6 +57,19 @@ a{
 	text-decoration : none;
 	color : black;
 }
+input{
+	background-color : black;
+	height : 30px;
+	color : white;
+	border : none;
+}
+button{
+	background-color : white;
+	color : black;
+	height : 30px;
+	border-radius : 2px;
+	border : none;
+}
 `;
 
 ReactDOM.render(

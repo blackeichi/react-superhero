@@ -4,6 +4,7 @@ import Header from "./Componens/Header";
 import "./App.css";
 import Home from "./Home";
 import Marvel from "./Marvel";
+import Search from "./Search";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path={"/"} element={<Home></Home>}></Route>
           <Route path={"/marvel"} element={<Marvel></Marvel>}></Route>
           <Route path={"/marvel/:Id"} element={<Marvel></Marvel>}></Route>
+          <Route path={"/search"} element={<Search></Search>}></Route>
         </Routes>
       </BrowserRouter>
     </>

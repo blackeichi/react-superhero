@@ -39,6 +39,7 @@ export interface ICharacter {
 }
 export interface IHeroComics {
   data: {
+    count: number;
     results: [
       {
         id: number;
@@ -74,5 +75,10 @@ export function marvelHeroDetail(id: string) {
 export function marvelHeroComics(id: string) {
   return fetch(
     `https://gateway.marvel.com:443/v1/public/characters/${id}/comics?apikey=${PublicKey}`
+  ).then((response) => response.json());
+}
+export function searchHero(name: string) {
+  return fetch(
+    `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${name}&apikey=${PublicKey}`
   ).then((response) => response.json());
 }

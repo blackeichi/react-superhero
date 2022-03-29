@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import React from "react";
 import { Link } from "react-router-dom";
-const API_KEY = "110637921590366";
+
 const Container = styled.div`
   height: 100vh;
   width: 100%;
