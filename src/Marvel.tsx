@@ -17,6 +17,7 @@ import {
   searchHero,
 } from "./api";
 import { searchState } from "./atom";
+import Comic from "./Comic";
 import { imageMaking } from "./util";
 const Header = styled.div`
   width: 100%;
@@ -201,6 +202,19 @@ const Comics = styled.div`
   flex-direction: column;
   width: 20%;
 `;
+const SearchComic = styled.div`
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
+    url("https://www.pixelstalk.net/wp-content/uploads/images6/Cool-Marvel-Wallpaper-Free-Download.jpg");
+  width: 100%;
+  height: 100vh;
+  background-position: center;
+  background-size: cover;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 const menulistShow = {
   hidden: { opacity: 0 },
   show: {
@@ -282,6 +296,10 @@ function Marvel() {
   const toggleBox = () => {
     setBoxOpen((prev) => !prev);
   };
+  const [boxOpen2, setBoxOpen2] = useState(false);
+  const toggleBox2 = () => {
+    setBoxOpen2((prev) => !prev);
+  };
   const [detailOpen, setDetailOpen] = useState(false);
   const navigate = useNavigate();
   const onDetail = (id: number) => {
@@ -297,6 +315,12 @@ function Marvel() {
     navigate(`/search?keyword=${data.name}`);
     setSearch(data.name);
     window.localStorage.setItem("search", JSON.stringify(data.name));
+  };
+  const back = () => {
+    navigate("/");
+  };
+  const onSearch = (data: IForm) => {
+    navigate(`/comic?keyword=${data.name}`);
   };
   return (
     <>
@@ -351,17 +375,18 @@ function Marvel() {
               <motion.h1
                 style={{ x: 300, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                Comics
-              </motion.h1>
-              <motion.h1
-                style={{ x: 300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 onClick={toggleBox}
               >
                 Charaters
+              </motion.h1>
+              <motion.h1
+                style={{ x: 300, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                onClick={toggleBox2}
+              >
+                Comics
               </motion.h1>
             </Menulist>
           </Hero>
@@ -704,6 +729,60 @@ function Marvel() {
               </>
             ) : null}
           </>
+        ) : null}
+        {boxOpen2 ? (
+          <SearchComic>
+            <svg
+              onClick={back}
+              style={{
+                position: "absolute",
+                top: "10px",
+                left: "10px",
+                width: "40px",
+                cursor: "pointer",
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+            >
+              <path
+                fill="white"
+                d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"
+              />
+            </svg>
+            <span
+              style={{
+                color: "white",
+                fontSize: " 30px",
+                marginBottom: "20px",
+              }}
+            >
+              Search Comics!
+            </span>
+            <form onSubmit={handleSubmit(onSearch)}>
+              <input
+                {...register("name", { required: true, minLength: 2 })}
+                style={{
+                  width: "200px",
+                  height: "60px",
+                  padding: "10px",
+                  color: "white",
+                  fontSize: "20px",
+                }}
+                type="text"
+                placeholder="Enter startwith.."
+              />
+              <button
+                style={{
+                  height: "80px",
+                  width: "70px",
+                  backgroundColor: "ghostwhite",
+                  cursor: "pointer",
+                }}
+              >
+                검색
+              </button>
+            </form>
+          </SearchComic>
         ) : null}
       </div>
     </>
