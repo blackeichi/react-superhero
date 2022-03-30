@@ -3,6 +3,7 @@ const PrivateKey = "14e4b3fe0372d456664df9140dd45c440d23d122";
 
 export interface ICharacter {
   data: {
+    count: number;
     results: [
       {
         id: number;

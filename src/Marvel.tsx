@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router";
 import { useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 //useHistory --> useNavigate로 교체됨
 import styled from "styled-components";
 import {
@@ -15,6 +16,7 @@ import {
   marvelHeroDetail,
   searchHero,
 } from "./api";
+import { searchState } from "./atom";
 import { imageMaking } from "./util";
 const Header = styled.div`
   width: 100%;
@@ -222,6 +224,7 @@ interface IForm {
 function Marvel() {
   const heroId = useParams();
   const layoutid = String(heroId.Id);
+  const setSearch = useSetRecoilState(searchState);
   const { data, isLoading } = useQuery<ICharacter>(
     ["marvel", "nowShowing"],
     marvelHero
@@ -292,6 +295,8 @@ function Marvel() {
   const { register, handleSubmit } = useForm<IForm>();
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.name}`);
+    setSearch(data.name);
+    window.localStorage.setItem("search", JSON.stringify(data.name));
   };
   return (
     <>

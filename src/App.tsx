@@ -5,8 +5,11 @@ import "./App.css";
 import Home from "./Home";
 import Marvel from "./Marvel";
 import Search from "./Search";
+import { useRecoilValue } from "recoil";
+import { searchState } from "./atom";
 
 function App() {
+  const search = useRecoilValue(searchState);
   return (
     <>
       <BrowserRouter>
@@ -16,6 +19,7 @@ function App() {
           <Route path={"/marvel"} element={<Marvel></Marvel>}></Route>
           <Route path={"/marvel/:Id"} element={<Marvel></Marvel>}></Route>
           <Route path={"/search"} element={<Search></Search>}></Route>
+          <Route path={`/search/:Id`} element={<Search></Search>}></Route>
         </Routes>
       </BrowserRouter>
     </>
