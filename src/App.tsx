@@ -21,7 +21,7 @@ function App() {
           <Route path={"/marvel/:Id"} element={<Marvel></Marvel>}></Route>
           <Route path={"/search"} element={<Search></Search>}></Route>
           <Route path={`/search/:Id`} element={<Search></Search>}></Route>
-          <Route path={`/comic`} element={<Comic></Comic>}></Route>
+          <Route path={"/comic"} element={<Comic></Comic>}></Route>
         </Routes>
       </BrowserRouter>
     </>

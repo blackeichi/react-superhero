@@ -43,10 +43,24 @@ export interface IHeroComics {
     count: number;
     results: [
       {
+        characters: {
+          available: number;
+          items: [
+            {
+              name: string;
+            }
+          ];
+        };
         id: number;
         title: string;
         description: string;
         pageCount: number;
+        prices: [
+          {
+            price: number;
+            type: string;
+          }
+        ];
         urls: [
           {
             url: string;
@@ -81,5 +95,17 @@ export function marvelHeroComics(id: string) {
 export function searchHero(name: string) {
   return fetch(
     `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${name}&apikey=${PublicKey}`
+  ).then((response) => response.json());
+}
+export function searchiComicsCharacter(name: string) {
+  return fetch(
+    `https://gateway.marvel.com:443/v1/public/comics?characters=${name}&apikey=${PublicKey}
+    `
+  ).then((response) => response.json());
+}
+export function searchiComicsName(name: string) {
+  return fetch(
+    `https://gateway.marvel.com:443/v1/public/comics?titleStartsWith=${name}&apikey=${PublicKey}
+    `
   ).then((response) => response.json());
 }

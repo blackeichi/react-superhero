@@ -96,6 +96,7 @@ export default function Search() {
   const search = useRecoilValue(searchState);
   const heroId = useParams();
   const layoutid = String(heroId.Id);
+  console.log(heroId);
   const location = useLocation();
   const [index2, setIndex2] = useState(0);
   const nextClick2 = () => {
@@ -154,7 +155,7 @@ export default function Search() {
           alignItems: "center",
         }}
       >
-        <Link to="/">
+        <Link to="/marvel">
           <div
             style={{
               height: "70px",

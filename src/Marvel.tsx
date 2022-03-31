@@ -251,7 +251,6 @@ function Marvel() {
     useQuery<IHeroComics>(["clickedHeroComics", layoutid], () =>
       marvelHeroComics(layoutid)
     );
-
   const [index, setIndex] = useState(0);
   const [index2, setIndex2] = useState(0);
 
@@ -375,7 +374,7 @@ function Marvel() {
               <motion.h1
                 style={{ x: 300, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                transition={{ duration: 0.5 }}
                 onClick={toggleBox}
               >
                 Charaters
@@ -383,7 +382,7 @@ function Marvel() {
               <motion.h1
                 style={{ x: 300, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
                 onClick={toggleBox2}
               >
                 Comics
